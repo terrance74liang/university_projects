@@ -1,1 +1,55 @@
+;name: terrance liang (40158057)
 
+; load our program to address $0801 (= 2049)
+  .org $0801
+
+  ; magic startup code (tokenized basic code for 228 SYS 2061)
+  .byte $0B, $08, $E4, $00, $9E, $32, $30, $36, $31, $00, $00, $00
+
+main:
+    JSR get_input                     ;subroutine to obtain user input
+    JSR print_input                   ;subroutine to print user input
+    JMP main                          ;once one character inputed and printed,jump back to start of main
+
+
+get_input:
+    ;read input into accumulator
+    JSR $FFE4                        ;loads input into accumulator 
+    BEQ get_input                    ;loops as long as temporary register is 0
+    STA char                         ;store the input in char
+    RTS ;end subroutine
+
+print_input:
+    LDA char                         ;load char to accumulator
+
+    CMP #$5B                         ;substract accumulator value from hex value 
+    BPL print_input3                 ;executes if temporary register is positive(prints characters above '/' without change)
+
+    CMP #$4E                         ;substract accumulator value from hex value and stores value in temporary register
+    BPL print_input2                 ;executes if temporary register is positive(for ROT 13)
+
+    CMP #$40                         ;substract accumulator value from hex value and stores value in temporary register
+    BMI print_input3                 ;to print all characters below '?' without change
+    BEQ print_input3                 ;to print character '@' without change
+
+    CLC                              ;clear carry for following operation
+    ADC #$0D                         ;add with carry with value in accumulator(for upper half of alphabet)
+    JSR $FFD2                        ;print accumulator value to screen
+
+    RTS                              ;return to main
+
+print_input2:
+    SBC #$0D                         ;subtract with carry(for lower half of alphabet)
+    JSR $FFD2                        ;print accumulator value to screen
+    JMP main                         ;jump back to main 
+
+print_input3:
+     JSR $FFD2                       ;print accumulator value to screen
+
+     JMP main                        ;jump back to main
+
+end:
+    RTS                              ;return to subroutine
+
+char:
+    .byte $00                        ;memory for character
