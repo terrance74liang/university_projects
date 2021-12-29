@@ -1,1 +1,1 @@
-# university_projects
+# concordia university collection of assignments and projects
