@@ -1,0 +1,234 @@
+---
+title: "Assignment 5"
+author: 'Terrance Liang 40158057'
+output: 'pdf_document'
+
+---
+
+## Chapter 4.1.1 question 4
+
+```{r}
+# nested for loop to to try for the three cases
+for (x in c(0.006, 0.005, 0.004)) {
+    i <- x
+    for (j in 1:20) {
+        i <- (1 - (1 + i)^(-20)) / 19
+    }
+    print(i)
+}
+# computed the mean of the three cases and rounded to 5 digits
+round(mean(c(0.005264348, 0.00495812, 0.004558684)), digits = 5)
+
+for (x in c(0.006, 0.005, 0.004)) {
+    i <- x
+    for (j in 1:1000) {
+        i <- (1 - (1 + i)^(-20)) / 19
+    }
+    print(i)
+}
+```
+we see that the mean using 20 iterations is 0.00493, we confirm that it approches that number by performing 
+1000 iterations in those same starting numbers.
+
+## Chapter 4.1.1 question 5
+
+```{r}
+for (i in c(2, 3, 4, 5)) {
+    x <- 0.5
+    pointer <- 0
+    # while condition that keeps only the right amount of significant digits, 
+    # and if their subtraction is not 0 it keeps iterating
+    while (abs(signif(x, i) - signif(cos(x), i)) != 0) {
+        # assigns the equation to the x to compare with the next value
+        x <- cos(x)
+        # counts the number of iterations
+        pointer <- pointer + 1
+    }
+    print(pointer)
+}
+print("")
+for (i in c(2, 3, 4, 5)) {
+    x <- 0.7
+    pointer <- 0
+    while (abs(signif(x, i) - signif(cos(x), i)) != 0) {
+        x <- cos(x)
+        pointer <- pointer + 1
+    }
+    print(pointer)
+}
+print("")
+for (i in c(2, 3, 4, 5)) {
+    x <- 0
+    pointer <- 0
+    while (abs(signif(x, i) - signif(cos(x), i)) != 0) {
+        x <- cos(x)
+        pointer <- pointer + 1
+    }
+    print(pointer)
+}
+```
+We notice that as the tolerance gets smaller, more iterations are needed, which is expected since to obtain a more precise estimate we need more iterations.
+We also notice that as our starting point becomes bigger, there are less iterations needed, thus our solution is closer to 0.7 than it is to the other points.
+
+## Chapter 4.1.1 question 6.a)
+
+```{r}
+for (i in c(2, 3, 4, 5)) {
+    x <- 0.5
+    pointer <- 0
+    while (abs(signif(x, i) - signif(1.5 * cos(x), i)) != 0) {
+        x <- 1.5 * cos(x)
+        pointer <- pointer + 1
+        if (pointer > 1000000) {
+            print(pointer)
+            break
+        }
+    }
+    print(pointer)
+}
+print("")
+for (i in c(2, 3, 4, 5)) {
+    x <- 0.7
+    pointer <- 0
+    while (abs(signif(x, i) - signif(1.5 * cos(x), i)) != 0) {
+        x <- 1.5 * cos(x)
+        pointer <- pointer + 1
+        if (pointer > 1000000) {
+            print(pointer)
+            break
+        }
+    }
+    print(pointer)
+}
+print("")
+for (i in c(2, 3, 4, 5)) {
+    x <- 0
+    pointer <- 0
+    while (abs(signif(x, i) - signif(1.5 * cos(x), i)) != 0) {
+        x <- 1.5 * cos(x)
+        pointer <- pointer + 1
+        if (pointer > 1000000) {
+            print(pointer)
+            break
+        }
+    }
+    print(pointer)
+}
+```
+
+For 1.5cos(x) none of the iterations for starting points 0, 0.5, 0.7 converges after 1 million iterations
+We know from numerical analysis that |g'(x)| needs to be smaller than 1 for x e [0,1], if we use x as 0.9149 we obtain 
+that |g'(x)| = 1.18875 which means it diverges.
+```{r}
+for (i in c(2, 3, 4, 5)) {
+    x <- 0.5
+    pointer <- 0
+    while (abs(signif(x, i) - signif((cos(x) / 30) + (44 * x / 45), i)) != 0) {
+        x <- (cos(x) / 30) + (44 * x / 45)
+        pointer <- pointer + 1
+        if (pointer > 1000000) {
+            print(pointer)
+            break
+        }
+    }
+    print(pointer)
+}
+print("")
+for (i in c(2, 3, 4, 5)) {
+    x <- 0.7
+    pointer <- 0
+    while (abs(signif(x, i) - signif((cos(x) / 30) + (44 * x / 45), i)) != 0) {
+        x <- (cos(x) / 30) + (44 * x / 45)
+        pointer <- pointer + 1
+        if (pointer > 1000000) {
+            print(pointer)
+            break
+        }
+    }
+    print(pointer)
+}
+print("")
+for (i in c(2, 3, 4, 5)) {
+    x <- 0
+    pointer <- 0
+    while (abs(signif(x, i) - signif((cos(x) / 30) + (44 * x / 45), i)) != 0) {
+        x <- (cos(x) / 30) + (44 * x / 45)
+        pointer <- pointer + 1
+        if (pointer > 1000000) {
+            print(pointer)
+            break
+        }
+    }
+    print(pointer)
+}
+```
+
+For (cos(x) / 30) + (44 * x / 45) all iterations converge for 0, 0.5, 0.7. We notice that the starting point with 0.7 has the least iterations, this
+is to b expected since the root is at 0.914...
+
+## Chapter 4.1.2 question 3
+
+```{r}
+twin_primes <- list()
+for (i in (0:1000))
+{
+    for (x in (i:1000)) {
+        if ((x == i + 2)) {
+            switch <- TRUE
+            for (z in (2:(x - 1))) {
+                if (x %% z == 0) {
+                    switch <- FALSE
+                    break
+                }
+            }
+            for (z in (2:(i - 1))) {
+                if (i %% z == 0) {
+                    switch <- FALSE
+                    break
+                }
+            }
+            if (switch == FALSE) {
+                break
+            }
+            twin_primes[[length(twin_primes) + 1]] <- c(x, i)
+        }
+    }
+}
+print("All the values")
+twin_primes
+
+print("The length of the list, counting the numbers of pairs")
+length(twin_primes)
+
+print("The length of the list, counting the numbers of individual elements")
+length(twin_primes) * 2
+
+print("the 10th pair")
+twin_primes[[10]]
+
+print("the 15th pair")
+twin_primes[[15]]
+```
+
+We create a for loop that compares number i ranging from 1 to 1000, which checks if the equation x = i + 2 is satisfied for x which takes all the subsequent numbers after i to avoid permutations of the same 
+elements. We then check if x and y are prime number by dividing them by all numbers from 2 to n-1. If they are not a prime te 'switch' variable will be set to false and the second nested loop will break.
+
+## Chapter 4.1.2 question 4
+```{r}
+GIC <- function(P, n) {
+    if (P <= 0 || n <= 0 || n %% 1 != 0) {
+        stop("error, principal cannot be negative, n cannot be negative, n must be integer")
+    }
+    if (n <= 3) {
+        i <- 0.04
+    } else {
+        i <- 0.05
+    }
+    return(P * ((1 + i)^n - 1))
+}
+GIC(1000, 2)
+GIC(1000, 20)
+```
+
+To determine wether we use an interest of 0.04 or 0.05 we set i to 0.04 if the condition of n smaller or equal to 3 is respected. If not, i is equal to 0.05. Once the i is decided we compute
+the formula with the given i over n time periods

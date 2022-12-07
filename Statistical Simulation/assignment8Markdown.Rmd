@@ -1,0 +1,107 @@
+---
+title: "Assignment 8"
+author: 'Terrance Liang 40158057'
+output: 'pdf_document'
+---
+
+## Chapter 5.3.3 problem 9
+
+```{r}
+# vector to save all B/A where A is the number of N for labda = 2 and B for lambda=4
+list_of_vals <- c()
+# Loop to check 1000 iterations to obtain a more general answer
+for (z in (1:1000)) {
+    A <- 0
+    B <- 0
+    # loop to iterate through labda = 2 and 4
+    for (i in c(2, 4)) {
+        lambda <- i
+        regionlength <- 10
+        regionwidth <- 10
+        N <- rpois(1, lambda * regionlength * regionwidth)
+        U1 <- runif(N, min = 0, max = regionwidth)
+        U2 <- runif(N, min = 0, max = regionlength)
+        # if condition to get the right values assigned to A and B
+        if (i == 2) {
+            A <- N
+        } else {
+            B <- N
+        }
+        # if condition to only print the plot once
+        if (z == 1) {
+            plot(U1, U2, main = paste("lambda =", i), sub = paste("N =", N))
+            print(A)
+            print(B)
+        }
+    }
+    list_of_vals <- append(list_of_vals, B / A)
+}
+# max and min values of N for B/A
+max(list_of_vals)
+min(list_of_vals)
+```
+After running the poisson process for lamda =2 and lambda=4 we can see that for 1000 iterations the smallest ratio is around 1.5 and the biggest is around 2.7. 
+Thus on average for the differing lamda values there is more or less at least 50% and at most 170% more points in B than in A. For the sake of answering the question, for 
+the first plot, the number of points are indicated on the first 2 lines generated.
+
+## Chapter 5.3.3 problem 10
+
+```{r}
+lambda <- 0.25
+N <- rpois(1, lambda * 15)
+U1 <- runif(N, min = 0, max = 15)
+plot(U1,main = paste("lambda =", lambda), sub = paste("N =", N))
+```
+One problem is that the region area is 2 dimensional, using a poisson process to model an area where the width and the length can vary with constant area does not attempt to model where the trees
+are located. Instead we would be modelling the area instead of the x and y points.
+
+## Chapter 5.3.6 problem 2
+
+```{r}
+normal <- rnorm(1000, 0, 1)
+
+pnorm(2.5, lower.tail = FALSE)
+length(normal[normal > 2.5]) / 1000
+
+pnorm(1.645, lower.tail = TRUE) - pnorm(0, lower.tail = TRUE)
+length(normal[(normal > 0) & (normal < 1.645)]) / 1000
+
+pnorm(1.45, lower.tail = TRUE) - pnorm(1.2, lower.tail = TRUE)
+length(normal[normal > 1.2 & normal < 1.45]) / 1000
+
+pnorm(1.3, lower.tail = TRUE) - pnorm(-1.2, lower.tail = TRUE)
+length(normal[normal > -1.2 & normal < 1.3]) / 1000
+```
+The values above are the theoretical values and the values below are the experimental values. We notice that most values are fairly close to the theoretical values, often differing by less than
+0.006
+
+## Chapter 5.3.6 problem 4
+
+```{r}
+normal <- rnorm(100, 0, 1)^2
+mean(normal)
+var(normal)
+```
+We notice that the mean and the variance are close, but not extremely close. This can most likely be explained by the smaller sample size of 100.
+
+## Chapter 5.3.6 problem 5
+
+```{r}
+chi <- c()
+for (i in (0:100)) {
+    chi <- append(chi, sum(rnorm(8, 0, 1)^2))
+}
+mean(chi)
+var(chi)
+```
+We notice that the mean and the variance are close, but not extremely close. This can most likely be explained by the smaller sample size of 100.
+
+```{r}
+chi <- c()
+for (i in (0:1000)) {
+    chi <- append(chi, sum(rnorm(8, 0, 1)^2))
+}
+mean(chi)
+var(chi)
+```
+On 1000 iterations we notice that they are much closer to the theoretical values.

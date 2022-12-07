@@ -1,0 +1,219 @@
+---
+title: "Assignment 6"
+author: 'Terrance Liang 40158057'
+output: 'pdf_document'
+---
+
+## Chapter 4.1.3 question 1
+
+```{r}
+# assignment of initial fibonnaci values 
+Fib1 <- 1
+Fib2 <- 1
+
+# create a vector of the current fibonnaci values
+Fibonacci <- c(Fib1, Fib2)
+
+# while loop to stop at fibbonacci value exceeding 300
+while (Fib2 < 300) {
+#concatenates all past fib values with the most recent one  
+    Fibonacci <- c(Fibonacci, Fib2)
+# computes the newest fib value 
+    Fib2 <- Fib1 + Fib2
+# assigns the last value to fib 1 to compute fib 2 after  
+    Fib1 <- Fibonacci[length(Fibonacci)]
+}
+print(Fibonacci)
+```
+
+## Chapter 4.1.3 question 2
+
+
+```{r}
+# creation of initial fibonnaci vales
+Fibonacci <- c(1, 1, 1)
+# while loop to validate until the last 2 values if their sum is less than 300
+while ((Fibonacci[length(Fibonacci)] + Fibonacci[length(Fibonacci) - 1]) < 300) {
+    # appends the last 2 values to the fibonnaci sequence
+    Fibonacci <- append(Fibonacci, (Fibonacci[length(Fibonacci)] + Fibonacci[length(Fibonacci) - 1]))
+}
+print(Fibonacci)
+
+```
+
+
+## Chapter 4.1.3 question 3
+
+```{r}
+Fibonacci <- c(1, 1, 1)
+while ((Fibonacci[length(Fibonacci)] + Fibonacci[length(Fibonacci) - 1]) < 1000000) {
+    Fibonacci <- append(Fibonacci, (Fibonacci[length(Fibonacci)] + Fibonacci[length(Fibonacci) - 1]))
+}
+length(Fibonacci)
+```
+
+We repeat the code from the last problem and we output the length og the resulting vector 
+
+## Chapter 4.1.3 question 4
+```{r}
+# for the sake of comparison we have a 0 as our initial vector element to be able to compare 
+# inside the while loop
+po <- c(0, 0.006)
+
+# check the absolute difference between the last 2 elements of the vector
+while (abs(po[length(po)] - po[length(po) - 1]) > 0.000001) {
+    # add a new element to the vector which follows the provided interest formula 
+    po <- c(po, (1 - (1 + po[length(po)])^(-20)) / 19)
+}
+print(po)
+```
+
+```{r}
+for (i in c(10, 1, 0.1, 0.01, 0.001, 0.0001)) {
+    po <- c(0, i)
+
+    while (abs(po[length(po)] - po[length(po) - 1]) > 0.000001) {
+        po <- c(po, (1 - (1 + po[length(po)])^(-20)) / 19)
+    }
+    print(po[length(po) - 1])
+    print(po[length(po)])
+    print(" ")
+}
+```
+If we use other starting guesses there will simply be more values outputted until we reach the absolute
+ difference of 0.000001, however, for bigger numbers we notice there is a trend for which a constant number of outputs are produced
+ 
+## Chapter 4.1.3 question 5
+
+```{r}
+po <- c(0, 0.006)
+count <- 0
+while (abs(po[length(po)] - po[length(po) - 1]) > 0.000001) {
+    count <- count + 1
+    po <- c(po, (1 - (1 + po[length(po)])^(-20)) / 19)
+}
+print(count)
+```
+We simply add a counter in the while loop that increases by 1 for every iteration
+
+```{r}
+for (i in c(10, 1, 0.1, 0.01, 0.001, 0.0001)) {
+    po <- c(0, i)
+    count <- 0
+    while (abs(po[length(po)] - po[length(po) - 1]) > 0.000001) {
+        count <- count + 1
+        po <- c(po, (1 - (1 + po[length(po)])^(-20)) / 19)
+    }
+    print(count)
+}
+```
+
+we notice that the number of iterations is constant for bigger starting points
+
+## Chapter 4.1.4 question 4
+
+```{r}
+D(expression((x - 3)^4 + 7 * (x - 2)^2 + x), "x")
+newton <- c(0, 3)
+while (abs(newton[length(newton)] - newton[length(newton) - 1]) > 0.01) {
+    # assigning the last output to x for simplicity
+    x <- newton[length(newton)]
+    # adding the new output to the sequence of newton outputs
+    newton <- c(newton, x - (((x - 3)^4 + 7 * (x - 2)^2 + x - 2.82) / (4 * (x - 3)^3 + 7 * (2 * (x - 2)) + 1)))
+}
+print(newton[length(newton)])
+```
+We derived the equation and solving for f'(x) = 0 gives us 2.12 has a slope of 0 at that point. We then find that at 2.12 f(x)=2.82 thus 
+for the sake of using newton's method we shift down by 2.82 so that there is a 0 to the function.
+
+## Chapter 4.1.4 question 5
+
+The function f (x) = (5x - 3)/(x - 1) has a single zero, since we are able to get (5x - 3 -2 +2)/(x - 1) = 5 + 2/(x-1) which is a rational function.
+Equalling it to zero gives that the zero is -2/5 +1.
+
+```{r}
+D(expression(5 + 2 / (x - 1)), "x")
+for (i in c(0.5, 0.75, 0.2)) {
+    newton <- c(0, i)
+    while (abs(newton[length(newton)] - newton[length(newton) - 1]) > 0.00000001) {
+        # assigning the last output to x for simplicity
+        x <- newton[length(newton)]
+        # adding the new output to the sequence of newton outputs
+        newton <- c(newton, x - ((5 + 2 / (x - 1)) / (-(2 / (x - 1)^2))))
+    }
+    print(newton)
+}
+```
+We notice that the first three converges to 0.6, 0.6 and 1 respectively, the last initial point gives and error on further inspection in the following
+block of code we notice that it in fact diverges to inficity
+```{r}
+# newton <- c(0, 1.25)
+# while (abs(newton[length(newton)] - newton[length(newton) - 1]) > 0.00000001) {
+#     # assigning the last output to x for simplicity
+#     x <- newton[length(newton)]
+#     # adding the new output to the sequence of newton outputs
+#     newton <- c(newton, x - ((5 + 2 / (x - 1)) / (-(2 / (x - 1)^2))))
+#     print(newton[length(newton)])
+# }
+```
+
+## Chapter 4.1.4 question 6
+
+Seperating the equation into two parts yields (x^2 - 6 * x + 9) and e^(-x), since the other side equals 0, this is allowed since dividing by either or will
+leave the other side intact. the first part has a single 0 at x= 3, the second one has no zeros since ln(0)=x is unsolvable 
+```{r}
+D(expression((x^2 - 6 * x + 9) * exp(-x)), "x")
+for (i in c(3.2, 2.99, 3.01)) {
+    newton <- c(0, i)
+    while (abs(newton[length(newton)] - newton[length(newton) - 1]) > 0.00000001) {
+        # assigning the last output to x for simplicity
+        x <- newton[length(newton)]
+        # adding the new output to the sequence of newton outputs
+        newton <- c(newton, x - (((x^2 - 6 * x + 9) * exp(-x)) / ((2 * x - 6) * exp(-x) - (x^2 - 6 * x + 9) * exp(-x))))
+    }
+    print(newton)
+}
+
+```
+We notice that the last three converges to 3 respectively, the first initial point gives and error on further inspection in the following
+block of code we notice that it in fact gives a nan value which we cannot continue out iteration from on the first value.
+```{r}
+
+# newton <- c(0, 3)
+# while (abs(newton[length(newton)] - newton[length(newton) - 1]) > 0.00000001) {
+#     # assigning the last output to x for simplicity
+#     x <- newton[length(newton)]
+#     # adding the new output to the sequence of newton outputs
+#     newton <- c(newton, x - (((x^2 - 6 * x + 9) * exp(-x)) / ((2 * x - 6) * exp(-x) - (x^2 - 6 * x + 9) * exp(-x))))
+#     print(newton)
+# }
+
+```
+
+## Chapter 4.1.5 question 2.cannot
+```{r}
+Eratosthenes <- function(n) {
+    # Print prime numbers up to n (based on the sieve of Eratosthenes)
+    if (n >= 2) {
+        sieve <- seq(2, n)
+        primes <- c()
+        while (length(sieve) > 0) {
+            p <- sieve[1]
+            primes <- c(primes, p)
+            sieve <- sieve[(sieve %% p) != 0]
+            if (p >= sqrt(n)) {
+                break
+            }
+        }
+        primes <- c(primes, sieve)
+        return(primes)
+    } else {
+        stop("Input value of n should be at least 2.")
+    }
+}
+
+Eratosthenes(10)
+```
+
+We create as break condition p >= sqrt(n) which says that if this is true all remaining numbers in sieve are prime. Thus for n =10 the sieve number 10
+need not be checked for prime, it is automatically prime given the condition.

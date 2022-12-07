@@ -1,0 +1,141 @@
+---
+title: "Assignment 1"
+author: 'Terrance Liang 40158057'
+output: 'pdf_document'
+---
+
+## problem 1 a
+
+Here we assign to a variable a function performing the calculations asked based on an input and which returns the output after the calculations
+```{r}
+fun <- function(input) {
+    return(cos(input * exp(1))^3 + log(5 * input, 3) - atan(input))
+}
+
+fun(1)
+```
+
+## problem 1 b
+
+we create a vector with 10^6+1 points all evenly spaced ranging from 1 to 2, these correspond to the parameters et in the "seq" function
+```{r}
+grid <- c(seq(from = 1, to = 2, length.out = 10^6 + 1))
+```
+
+## problem 1 c
+
+we use the sample function on the grid variable we created, this samples n values from the vector without replacement and then assigns it
+to an attribute of of subgrid variable
+```{r}
+m <- c(10, 100, 1000)
+
+subgrid.1 <- sample(grid, size = m[1], replace = FALSE)
+subgrid.2 <- sample(grid, size = m[2], replace = FALSE)
+subgrid.3 <- sample(grid, size = m[3], replace = FALSE)
+```
+
+## problem 1 d
+
+we compute the mean of the output of the functions using each subgrid's attribute as input and store it inside another variable's attribute in 
+the form of a vector of length 3.
+```{r}
+eval.1 <- fun(subgrid.1)
+eval.2 <- fun(subgrid.2)
+eval.3 <- fun(subgrid.3)
+
+monte.carlo <- c(mean(eval.1), mean(eval.2), mean(eval.3))
+
+print(mean(monte.carlo))
+```
+
+## problem 1 e
+
+we compute the integral of the function
+```{r}
+integral <- 0.479199
+
+integral_full <- integrate(fun, 1, 2)
+
+print(integral_full)
+
+print(monte.carlo - integral)
+```
+
+We notice that the integral of the function is in the neighborhood of the samples taken. The differences between the mean value of every column is 
+very minimal with the integral as well as the difference between the entire mean of the vector with the integral. The bigger the sample the smaller the 
+difference.
+
+## chapter 2.1 problem 3
+
+we compute the total interest earned at every period and the ones prior to the current period
+```{r}
+investment <- 2000 * ((1 + 0.03)^(1:30)) - 2000
+print(investment)
+```
+
+## chapter 2.1 problem 6
+
+we compute the area of pi for various radius and list them
+```{r}
+radius <- pi * (3:100)^2
+print(radius)
+```
+
+## chapter 2.3 problem 1
+
+we compute the geometric sum until n the long and the fast way and compare the differences
+```{r}
+geometric_sum_long <- function(n, r) {
+    sum <- 0
+    for (x in (0:n))
+    {
+        sum <- sum + r^x
+    }
+
+    return(sum)
+}
+
+geometric_sum_short <- function(n, r) {
+    return((1 - r^(n + 1)) / (1 - r))
+}
+
+for (x in seq(10, 40, 10))
+{
+    print(geometric_sum_long(x, 1.08))
+    print(geometric_sum_short(x, 1.08))
+}
+
+for (x in seq(10, 40, 10))
+{
+    print(geometric_sum_long(x, 1.06))
+    print(geometric_sum_short(x, 1.06))
+}
+```
+
+## chapter 2.3 problem 2
+we perform the geometric sum for another ratio but for the same range
+```{r}
+sum_vector <- c(geometric_sum_short((1:100), 1.08))
+print(sum_vector)
+```
+
+### chapter 2.3 problem 8
+for vector 1 we create a sequence ranging from 0 to 4 for which every value of
+that sequence is individually and subsequently repeated based at it's corresponding index indicated by rep(5,5)
+
+for vector 2 we generate a sequence from 1 to 5 which is repeated 5 times subsequently but not individually
+```{r}
+vector_1 <- rep(seq(0, 4), rep(5, 5))
+print(vector_1)
+
+vector_2 <- rep(seq(1, 5), 5)
+print(vector_2)
+```
+
+## chapter 2.3 problem 9
+
+we generate a sequence from 1 to 5 which is subsequently repeated and increment every interval of of 5 values by 0 then the next 5 values by 1 and so on
+```{r}
+vector_3 <- rep(seq(1, 5), 5) + rep(seq(0, 4), rep(5, 5))
+print(vector_3)
+```

@@ -1,0 +1,172 @@
+---
+title: "Assignment 4"
+author: 'Terrance Liang 40158057'
+output: 'pdf_document'
+
+---
+
+## Chapter 3.1 question 1
+
+a)
+```{r}
+par(mfrow=c(2,2))
+hist(islands, breaks = "Sturges", main = "Sturges")
+hist(log(islands), breaks = "Sturges", main = "Sturges on log scale")
+hist(islands, breaks = "Scott", main = "Scott")
+hist(log(islands), breaks = "Scott", main = "Scott on log scale")
+```
+
+b)
+```{r}
+par(mfrow=c(1,2))
+qqplot( rnorm(48),log(1000 * islands, 10))
+qqplot( rnorm(48),islands)
+```
+
+We construct a QQplot using the untouched island data and the log scaled island data. In the first case,
+it has the most similarities with the 4th picture titled "D is skewed to the right". For the log scaled 
+data, it also has the most similarities with the 4th picture. In both cases, because of the heavy rightward 
+skewness, we expect the orignal data to follow a distribution with some similarities to the exponential one.
+
+c)
+```{r}
+par(mfrow=c(1,2))
+boxplot(x=islands, main = "Original scale")
+boxplot(x=log(islands), main = "Log scale")
+```
+
+d)
+
+```{r}
+par(mfrow=c(1,2))
+dotchart(x=islands,main="Original scale",cex = 0.3, cex.main = 2)
+dotchart(x=log(islands),main="Log scale",cex = 0.3, cex.main = 2)
+```
+Using the log scale we notice that differences are more easily visualisable as compared to 
+the orginal scale where most values are all at the inital line. Thus the log scale enables better 
+visualisation of differences as opposed to the orignal one.
+
+e)
+Different graphics have different uses, thus there is not a better overall graphic for displaying data,
+QQplot give insight on data normality/skewness but a dotchart gives a mean for comparison. Using one  
+for the purpose of the other would provide no isight on the matter we are looking for. Thus the better
+graphic depends on the use and the purpose we are looking for.
+
+In terms of what is the better graphic amongst the ones we have used for its specific purpose, 
+the sturges histogram on log scale for comparing frequency, the log scaled dot chart for investigasting skewness
+and normality, then the log scaled box plot for identifyig quartiles and outliers, and finally
+the log scaled dot chart for comparing differences.
+
+## Chapter 3.1 question 3
+
+a)
+```{r}
+plot(pressure ~ temperature, data = pressure)
+```
+The variables seem to be non linearly related because of the evident curve in the data points,
+b)
+```{r}
+residuals <- with(pressure, pressure - (0.168 + 0.007 * temperature)^(20 / 3))
+qqplot(rnorm(length(residuals)), residuals)
+```
+Because the plot does not represent a straight line when plotted against a normal distribution, 
+the residuals are therefore not normally distributed. We also notice that the plot increases at a faster 
+rate a the values increase on the horizontal axis, therefore there is a skewed to the right distribution.
+
+c)
+```{r}
+plot(pressure^(3/20) ~ temperature, data = pressure)
+```
+After transformation, there is now a clear linear relationship between the temperature and the Transformed
+pressure values.
+d)
+```{r}
+residuals <- with(pressure, pressure^(3/20) - (0.168 + 0.007*temperature)^(20/3))
+Normal <- rnorm(length(residuals))
+qqplot(Normal, residuals)
+```
+The QQplot shows that the residuals do not follow a normal distribution due to the non linearity of the 
+plot. The rate of increase decreases as the values on the horizontal axis grow. Thus it follows a left skewed distribution.
+
+## Chapter 3.3 question 3
+
+```{r}
+par(list = list(mfrow = c(3, 2), mar = c(2.5, 2.1, 0.1, 0.1)))
+Z <- (rnorm(1000))^2
+hist(Z, main = "")
+hist(Z, breaks = "Freedman-Diaconis", main = "")
+plot(density(Z), main = "")
+boxplot(Z)
+qqnorm(Z, main = "")
+qqline(Z)
+ts.plot(Z)
+```
+Comparing our modified plots with the plots in figure 3.18 we notice that the histogram is now
+skewed to the right. The histogram using the freedman-diaconis breaks has also now become right 
+skewed. The density plot have also now become right skewed. the box plot had its lower tail shortened, more outliers
+and it's overall box size reduced. the QQ plot is now not normal anymore but right skewed instad, the tsplot now has 
+higher peaks. It is also important to note that all the axis which had negatiev values are now 
+only located in the positive parts of their respectiev axis due to the square operator.
+
+## Chapter 3.3 question 4
+```{r}
+par(list = list(mfrow = c(3, 2), mar = c(2.5, 2.1, 0.1, 0.1)))
+Z <- EuStockMarkets
+hist(Z, main = "")
+hist(Z, breaks = "Freedman-Diaconis", main = "")
+plot(density(Z), main = "")
+boxplot(Z)
+qqnorm(Z, main = "")
+qqline(Z)
+ts.plot(Z)
+summary(Z)
+```
+We notice that it is right skewed, there are presence of outliers past the upper whisker and the upper whisker is very large as opposed to the 
+lower one. The datasets are not normal. The stock with the all time high is SMI, the lowest low is DAX, the highest mean is FTSE.
+
+The histograms and the density plots do not show further insight, we are able to discern that it is right sweked based on the
+QQplot. The first 3 plots only show frequency at certain points and no additional insight is given. The last 3 plots are useful
+since the box plot shows outlier values for every stock perhaps showing overvaluation and undervaluation values. The
+QQ plot shows that the values are right skewed showig that the data is not normal, the time series plot
+graphs the values of each stock with respect to time, which gives a mean of comprison across the different
+stocks at the chosen point in time.
+
+## Chapter 3 question 2
+
+a)
+```{r}
+plot(pressure ~ temperature, pressure)
+curve((0.168 + 0.007 * x)^(20 / 3), from = 0, to = 400, add = TRUE)
+```
+
+b)
+```{r}
+plot(pressure^(3 / 20) ~ temperature, pressure)
+abline(lm(pressure^(3 / 20) ~ temperature, pressure))
+```
+The plot is now shows that both variables are linearly related
+c)
+```{r}
+plot(pressure^(3 / 20) ~ temperature, pressure)
+abline(lm(pressure^(3 / 20) ~ temperature, pressure))
+title("Transformed pressure \n value vs temperature")
+```
+
+d)
+```{r}
+par(mfrow = c(2, 1))
+plot(pressure ~ temperature, pressure)
+curve((0.168 + 0.007 * x)^(20 / 3), from = 0, to = 400, add = TRUE)
+title("pressure \nvalue vs temperature")
+plot(pressure^(3 / 20) ~ temperature, pressure)
+abline(lm(pressure^(3 / 20) ~ temperature, pressure))
+title("Transformed pressure \nvalue vs temperature")
+
+par(mfrow = c(1, 2))
+plot(pressure ~ temperature, pressure)
+curve((0.168 + 0.007 * x)^(20 / 3), from = 0, to = 400, add = TRUE)
+title("pressure \nvalue vs temperature")
+plot(pressure^(3 / 20) ~ temperature, pressure)
+abline(lm(pressure^(3 / 20) ~ temperature, pressure))
+title("Transformed pressure \nvalue vs temperature")
+```

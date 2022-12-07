@@ -1,0 +1,146 @@
+---
+title: "Assignment 2"
+author: 'Terrance Liang 40158057'
+output: 'pdf_document'
+---
+
+## Chapter 2.3 question 10
+
+```{r}
+# we create two sequences of 000 and 1111, combine them into a single vector and repeat
+# the combined vector 5 times
+vector1 <- factor(rep(c(rep(0, 3), rep(1, 4)), 5))
+# we assign new values to the levels which will be reflected in the combined vector
+levels(vector1)[c(1, 2)] <- c("Male", "Female")
+print(vector1)
+```
+
+## Chapter 2.3 question 11
+
+```{r}
+# created a vector of colours
+more.colors <- c("red", "yellow", "blue", "green", "magenta", "cyan")
+# indexing the vector of colours to produce the wanted vector
+more.colors <- more.colors[factor(rep(seq(1, 3), 4) + rep(seq(0, 3), rep(3, 4)))]
+print(more.colors)
+```
+
+## Chapter 2.3 question 12
+
+```{r}
+# turning the more.colors vector into a factor
+more.colors <- factor(more.colors)
+# displaying the levels of the more.colors factor
+print(levels(more.colors))
+# changing blue into turqoise
+levels(more.colors)[1] <- "turquoise"
+print(more.colors)
+```
+
+## Chapter 2.7 question 1
+
+```{r}
+# creating the sequence from which we need to identify the elements from
+expo <- rep(2, 15)^(1:15)
+# creating the sequence which we compare with
+expo_comp <- seq(1, 15)^3
+# selects the values which respect the operator
+expo[expo > expo_comp]
+# outputs in boolean form the values which respect the operator
+expo > expo_comp
+```
+
+## Chapter 2.7 question 5
+
+```{r}
+testValue <- 7
+(testValue > 0) && (sqrt(testValue) < 5)
+testValue <- -7
+(testValue > 0) && (sqrt(testValue) < 5)
+```
+We implemented && instead of &, this makes use of the concept of short circuit or lazy evaluation which does not run the second part of the condition if the first part is false.
+
+## Additional problems 1
+
+### a)
+
+```{r}
+# created a sequence from 1 to 21 which increments by 2
+seq(1, 21, 2)
+```
+
+### b)
+
+```{r}
+# created a repeated sequence of 10's which is power by the sequence fro 0 to 9 for each 
+# element correspondingly
+options(scipen = 999)
+rep(10, 10)^(seq(0, 9))
+```
+
+### c)
+
+```{r}
+# created a sequence from 0 to 3 and repeat that sequence 6 times
+rep(seq(0,3),6)
+```
+
+### d)
+
+```{r}
+# created a sequence from 0 to 4 whose elements are repeated accordingly with 
+# respect to 3,3,3,3,3
+rep(seq(0,4),rep(3,5))
+```
+
+### e)
+
+```{r}
+# created a sequence from 50 to 11 which decrements by 3
+seq(50,11,-3)
+```
+
+### f)
+
+```{r}
+# created a vector (1,2,5), we then multiply that sequence by 10,100,1000,10000 
+# which was created by exponentiating via the sequence 0,0,0,1,1,1,2,2,2,...
+c(1,2,5)*(rep(10,3)^rep(seq(0,4),rep(3,5)))
+```
+
+## Additinal problems 2
+
+### a)
+```{r}
+c(cos((pi*(0:10))/3))
+```
+
+### b)
+```{r}
+# created a sequence of 10's which were exponentiated by 0,1,2,3... to give
+# 1,10,100,... whic was then subtracted by a sequence from 0 to 6
+options(scipen = 999)
+(rep(10,7)^seq(0,6))-seq(0,6)
+```
+
+### c)
+```{r}
+c(exp((0:10))-3*(0:10))
+```
+
+### d)
+```{r}
+c((3*(0:10))%%7)
+```
+
+### e)
+```{r}
+# function created to avoid repetition
+approximater <- function(input){
+    return(4*sum(((-1)^((1:input) + 1)) / (2 * (1:input) - 1)))
+}
+
+approximater(10)
+approximater(100)
+approximater(1000)
+```

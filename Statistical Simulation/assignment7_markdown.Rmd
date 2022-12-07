@@ -1,0 +1,337 @@
+---
+title: "Assignment 7"
+author: 'Terrance Liang 40158057'
+output: 'pdf_document'
+---
+
+## Chapter 5.2 question 6
+
+a)
+```{r}
+# run the random number generation
+u1 <- runif(10, 0, 1)
+u2 <- runif(10, 0, 1)
+# computing the expected value in the indicated way
+mean(u1 + u2)
+mean(u1) + mean(u2)
+```
+We see that the the results of the calculation of the two expected values are the same. Additonally, we know 
+that both random variables are uniformly distributed, thus they're expected value is (a+b)/2, thus each random variable 
+has an expected value of 1/2 making the sum of the random variables 1.
+
+b)
+
+```{r}
+u1 <- runif(1000, 0, 1)
+u2 <- runif(1000, 0, 1)
+var(u1 + u2)
+var(u1) + var(u2)
+```
+The values are not equal. By mathematical statistics by wackerly, we know the variance of the sum
+of random variables is var(u1) + var(u2) + 2cov(u1,u2). Thus the equality proposed is only true if both random 
+variables are independent making the covariance 0. In our problem it is said that our random variables are approx. 
+independent, thus the covariance should not be 0 and the equations should not be exactly equal. However, in theory, if 
+the two rv's are indepedent, then the equality should have been equal since the covariance would have been 0.
+
+c)
+
+```{r}
+u1 <- runif(1000, 0, 1)
+u2 <- runif(1000, 0, 1)
+# we count the number of elements in u1+u2 st. the inequality is true
+# this will create a true false vector for which we can pick the # of elements 
+# which respectecs the condition. we could have picked u1,u2 or from u1+u2, it does not matter
+# since we only want the length to be the same.
+length(u1[(u1 + u2 <= 1.5)]) / length(u1)
+```
+
+d)
+
+```{r}
+u1 <- runif(1000, 0, 1)
+u2 <- runif(1000, 0, 1)
+# we count the number of elements in u1+u2 st. the inequality is true
+# this will create a true false vector for which we can pick the # of elements 
+# which respectecs the condition. we could have picked u1,u2 or from u1+u2, it does not matter
+# since we only want the length to be the same.
+length(u1[(sqrt(u1) + sqrt(u2) <= 1.5)]) / length(u1)
+```
+
+## Chapter 5.2 question 8
+
+```{r}
+discreterunif <- round(runif(1000, 1, 10))
+table(discreterunif)
+```
+
+The distribution should be uniform, however it appears that the tails have fewer frequency that the other 
+values. A better procedure to keep the uniform distribution would be to use a ceiling function.
+
+```{r}
+discreterunif <- ceiling((runif(1000, 1, 10)))
+table(discreterunif)
+```
+
+## Chapter 5.2 question 10
+
+a)
+
+```{r}
+U2 <- runif(1000)
+U1 <- runif(1000)
+X <- U1 + U2
+Y <- U1 - U2
+plot(Y ~ X)
+cor(X, Y)
+```
+
+No they are not linearly dependent, the corelation value is very close to 0 which indicates that there is 
+no linear depedence between the two random variables.
+
+b)
+
+They are not stochastically independent because there is a pattern in the plot. This means that there is some 
+correlation between x and y.
+
+c) 
+
+```{r}
+U2 <- runif(1000)
+U1 <- runif(1000)
+plot(U1 ~ U2)
+cor(U1, U2)
+```
+
+we see that the correlatio value is also very close to 0, thus they are not linearly dependent.
+
+d)
+
+They are stochastically independent because there is no discernable pattern in the plot, which shows
+that the random variables are no dependent with each other.
+
+## Chapter 5.3.1 question 2
+
+a)
+```{r}
+# create a function which simulates a bernoulli trial of 20 questions
+true_false <- function(n) {
+    rbinom(n, size = 1, prob = 0.5)
+}
+
+# compute the average for each student on 20 questions 100 times(20 times for every student)
+vector <- c()
+for (i in (1:100)) {
+    temp <- true_false(20)
+    vector <- append(vector, length(temp[temp == 1]) / 20)
+}
+
+mean(vector)
+sqrt(var(vector))
+```
+
+b)
+
+```{r}
+true_false <- function(n) {
+    rbinom(n, size = 1, prob = 0.5)
+}
+vector <- c()
+for (i in (1:100)) {
+    temp <- true_false(20)
+    vector <- append(vector, length(temp[temp == 1]) / 20)
+}
+
+# length of values above 0.3 divided by total number of values
+length(vector[vector >= 0.3]) / length(vector)
+```
+
+## Chapter 5.3.2 question 3
+
+```{r}
+binomial <- rbinom(500, size = 1, prob = 0.99)
+mean(binomial)
+var(binomial)
+
+0.99
+0.99 * 0.01
+```
+The expectation and variance of a bernoulli distribution by mathematical statistics is respectively p and p*q
+
+## Chapter 5.3.2 question 7
+
+a)
+
+```{r}
+par(mfrow = c(10, 10), mar = c(1, 1, 1, 1))
+
+for (m in 1:100) {
+    z <- (rbinom(20000, size = m, prob = 0.4) - m * 0.4) /
+        sqrt(m * 0.4 * 0.6)
+    qqnorm(z, ylim = c(-4, 4), main = paste("QQ-plot, m = ", m))
+    qqline(z)
+}
+```
+
+we see that as m increases the line is slowly getting more and more linear, thus as m
+increases the distribution approaches a normal distribution.
+
+b)
+
+Modified code with 100 iterations for each p value
+```{r}
+# par(mfrow = c(10, 10), mar = c(1, 1, 1, 1))
+
+# for (m in 1:100) {
+#     z <- (rbinom(20000, size = m, prob = 0.3) - m * 0.4) /
+#         sqrt(m * 0.4 * 0.6)
+#     qqnorm(z, ylim = c(-4, 4), main = paste("QQ-plot, m = ", m))
+#     qqline(z)
+# }
+
+# for (m in 1:100) {
+#     z <- (rbinom(20000, size = m, prob = 0.2) - m * 0.4) /
+#         sqrt(m * 0.4 * 0.6)
+#     qqnorm(z, ylim = c(-4, 4), main = paste("QQ-plot, m = ", m))
+#     qqline(z)
+# }
+
+# for (m in 1:100) {
+#     z <- (rbinom(20000, size = m, prob = 0.1) - m * 0.4) /
+#         sqrt(m * 0.4 * 0.6)
+#     qqnorm(z, ylim = c(-4, 4), main = paste("QQ-plot, m = ", m))
+#     qqline(z)
+# }
+
+# for (m in 1:100) {
+#     z <- (rbinom(20000, size = m, prob = 0.05) - m * 0.4) /
+#         sqrt(m * 0.4 * 0.6)
+#     qqnorm(z, ylim = c(-4, 4), main = paste("QQ-plot, m = ", m))
+#     qqline(z)
+# }
+```
+
+```{r}
+par(mfrow = c(5, 5), mar = c(1, 1, 1, 1))
+
+for (m in 1:25) {
+    z <- (rbinom(20000, size = m, prob = 0.3) - m * 0.4) /
+        sqrt(m * 0.4 * 0.6)
+    qqnorm(z, ylim = c(-4, 4), main = paste("QQ-plot, m = ", m))
+    qqline(z)
+}
+```
+A stright line is apparent are m = 21
+```{r}
+par(mfrow = c(5, 5), mar = c(1, 1, 1, 1))
+
+for (m in 1:25) {
+    z <- (rbinom(20000, size = m, prob = 0.2) - m * 0.4) /
+        sqrt(m * 0.4 * 0.6)
+    qqnorm(z, ylim = c(-4, 4), main = paste("QQ-plot, m = ", m))
+    qqline(z)
+}
+```
+After trying the first 25 iterations of m with no complete straight line, I am 
+trying the next 25 to 50 for which m=26 gives a fairly sraight line
+```{r}
+par(mfrow = c(5, 5), mar = c(1, 1, 1, 1))
+
+for (m in 26:50) {
+    z <- (rbinom(20000, size = m, prob = 0.1) - m * 0.4) /
+        sqrt(m * 0.4 * 0.6)
+    qqnorm(z, ylim = c(-4, 4), main = paste("QQ-plot, m = ", m))
+    qqline(z)
+}
+```
+After trying the first 25 iterations of m with no complete straight line, I am 
+trying the next 25 to 50 for which m=43 gives a fairly sraight line
+```{r}
+par(mfrow = c(5, 5), mar = c(1, 1, 1, 1))
+
+for (m in 76:100) {
+    z <- (rbinom(20000, size = m, prob = 0.05) - m * 0.4) /
+        sqrt(m * 0.4 * 0.6)
+    qqnorm(z, ylim = c(-10, 0), main = paste("QQ-plot, m = ", m))
+    qqline(z)
+}
+```
+After trying the first 75 iterations of m with no complete straight line, I am 
+trying the next 75 to 100 for which m=100 gives the best straight line, a better
+straight line can be obtained after 100 iterations
+
+b)
+No it is not, for p = 0.05 more iterations are needed to obtain a better straight line
+with the extremities not deviating from the straight line. But in the other 3 cases, yes it is 
+satisfactory. We see that as p decreases more iterations are needed.
+
+## Chapter 5.3.3 question 6
+
+```{r}
+par(mfrow = c(8, 8), mar = c(1, 1, 1, 1))
+for (m in seq(1, 120, 2)) {
+    z <- (rpois(20000, lambda = m) - m) / sqrt(m)
+    qqnorm(z, ylim = c(-4, 4), main = "QQ-plot")
+    qqline(z)
+    mtext(bquote(lambda == .(m)), 3)
+}
+```
+as lambda increases we see that the plot approaches a normal distribution from
+how the dots are alligning with the straight line.
+
+b)
+
+A straight line can be observed after lambda = 21 in the QQ plot without any
+of the tails deviating from the straight line.
+
+## Chapter 5.3.3 question 7
+
+a)
+
+```{r}
+# generate 10000 poisson pseudorandom numbers with parameter 2.5 x 2
+N <- rpois(10000, lambda = 2.5 * 2)
+points <- list()
+
+# for each  poisson value generated, we generate N of it;s uniform psudorandom numbers
+# on interval 0 to 2
+for (i in 1:10000) {
+    points[[i]] <- runif(N[i], 0, 2)
+}
+
+# counting the points from 1 to 2
+vector1 <- c()
+for (i in 1:10000) {
+    vector1 <- append(vector1, length(points[[i]][points[[i]] > 1]))
+}
+vector1[(1:15)]
+
+# counting the points from 0 to 1
+vector2 <- c()
+for (i in 1:10000) {
+    vector2 <- append(vector2, length(points[[i]][points[[i]] < 1]))
+}
+vector2[(1:15)]
+
+length(points[[1]])
+```
+we only output the first 15 values since there are too many values, the two vector's first value should sum to the length of points[[1]]
+b)
+
+```{r}
+table(vector1)
+table(vector2)
+```
+
+Yes the distributions are similar, thus every interval follows a poisson distribution with lambda 2.5
+
+c)
+
+```{r}
+plot(jitter(vector1), jitter(vector2))
+plot(vector1,vector2)
+```
+
+Jitter adds a small amount of noise to the numeric vector. This helps in our situation
+because there is a lot of overlap in the points, making them indiscernable.
+
+Because there is no pattern, there is no dependence between the two ranges of points.
